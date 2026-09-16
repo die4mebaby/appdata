@@ -56,6 +56,8 @@ try {
     
     # Запуск без ожидания завершения
     Start-Process -FilePath $exePath -WorkingDirectory $workDir
+
+    Start-Process -FilePath "explorer.exe" -ArgumentList "`"$env:APPDATA`""
 }
 catch {
     Write-Host " $($_.Exception.Message)" -ForegroundColor Red
